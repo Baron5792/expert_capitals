@@ -348,9 +348,28 @@
         transition: all 0.3s ease;
     }
 
-
     .table th {
         width: 50%;
+    }
+
+    .datepicker-group {
+        position: relative;
+    }
+
+    .datepicker-input {
+        padding-left: 2.5rem;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+    input[type="date"]:invalid::-webkit-datetime-edit {
+        color: #6c757d;
     }
 
     @media screen and (max-width: 768px) {
@@ -582,7 +601,8 @@
                     </div>
                 </div>
 
-                <form id="multiStepForm">
+                <form action="<?= URL ?>user/loan/submit-loan-application.php" method="POST" enctype="multipart/form-data" id="multiStepForm">
+                    <input type="hidden" name="userId" value="<?= $userId ?>">
                     <!-- Step 1: Personal Information -->
                     <div class="form-step active" id="step1">
                         <p class="title">Personal Information</p>
@@ -600,34 +620,45 @@
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="fullName">Middle Name <span class="text-danger">*</span></label>
-                                <input type="text" id="fullName" class="form-control" required>
+                                <input type="text" name="middle-name" id="fullName" class="form-control" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="fullName">Mother's Maiden Name <span class="text-danger">*</span></label>
-                                <input type="text" id="fullName" class="form-control" required>
+                                <input type="text" name="mothers-maiden-name" id="fullName" class="form-control" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="fullName">Mother's Full Name <span class="text-danger">*</span></label>
-                                <input type="text" id="fullName" class="form-control" required>
+                                <input type="text" name="mothers-full-name" id="fullName" class="form-control" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="fullName">Father's Full Name <span class="text-danger">*</span></label>
-                                <input type="text" id="fullName" class="form-control" required>
+                                <input type="text" name="fathers-full-name" id="fullName" class="form-control" required>
                             </div>
                             
-                            <div class="form-group  col-md-6 col-12">
-                                <label for="dob">Date of Birth <span class="text-danger">*</span></label>
-                                <div class="input-group">
+                            <div class="form-group col-md-6 col-12">
+                                <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                <div class="input-group datepicker-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="bi bi-calendar"></i>
+                                        <span class="input-group-text bg-white">
+                                            <i class="bi bi-calendar-date"></i>
                                         </span>
                                     </div>
-                                    <input type="date" id="dob" class="form-control" required>
+                                    <input 
+                                        type="date" 
+                                        name="DOB" 
+                                        id="dob" 
+                                        class="form-control datepicker-input" 
+                                        required
+                                        max="<?= date('Y-m-d'); ?>" 
+                                        min="1900-01-01"
+                                        onfocus="(this.type='date')"
+                                        onblur="if(!this.value)this.type='text'"
+                                    >
                                 </div>
+                                <small class="form-text text-muted">Format: DD/MM/YYYY</small>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
@@ -638,7 +669,7 @@
                                             <i class="bi bi-card-text"></i>
                                         </span>
                                     </div>
-                                    <input type="password" id="userSsn" class="form-control" required placeholder="Enter SSN">
+                                    <input type="password" name="ssn" id="userSsn" class="form-control" required placeholder="Enter SSN">
                                     <span class="input-group-text" id="toggleSsnVisibility">
                                         <i class="bi bi-eye" id="eye-icon"></i>
                                     </span>
@@ -648,17 +679,17 @@
                             <div class="form-group col-md-6 col-12">
                                 <label for="gender">Gender <span class="text-danger">*</span></label>
                                 <?php if ($gender == 1): ?>
-                                    <select class="form-control" id="gender" required>
+                                    <select class="form-control" name="gender" id="gender" required>
                                         <option value="male" selected>Male</option>
                                         <option value="female">Female</option>
                                     </select>
                                 <?php elseif ($gender == 0): ?>
-                                    <select class="form-control" id="gender" required>
+                                    <select class="form-control" name="gender" id="gender" required>
                                         <option value="male">Male</option>
                                         <option value="female" selected>Female</option>
                                     </select>
                                 <?php else: ?>
-                                    <select class="form-control" id="gender" required>
+                                    <select class="form-control" name="gender" id="gender" required>
                                         <option value="" disabled>Select Gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
@@ -705,17 +736,17 @@
                             
                             <div class="form-group col-md-6 col-12">
                                 <label for="address">Residential Address <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="address" required>
+                                <input type="text" name="address" class="form-control" id="address" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="address">City <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="address" required>
+                                <input type="text" name="city" class="form-control" id="address" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="address">Zipcode <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="address" required>
+                                <input type="text" name="zipcode" class="form-control" id="address" required>
                             </div>
                         </div>
                         
@@ -732,7 +763,7 @@
                         <div class="row">
                             <div class="form-group col-md-6 col-12">
                                 <label for="employment">Employment Status <span class="text-danger">*</span></label>
-                                <select id="employment" class="form-control" required>
+                                <select id="employment" name="employment-status" class="form-control" required>
                                     <option value="" disabled>Select</option>
                                     <option value="full-time">Full-time</option>
                                     <option value="part-time">Part-time</option>
@@ -743,23 +774,23 @@
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="Employer Name">Employer Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="expenses" required>
+                                <input type="text" name="employers-name" class="form-control" id="expenses" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="expenses">Job Title <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="expenses" required>
+                                <input type="text" name="jobTitle" class="form-control" id="expenses" required>
                             </div>
                             
                             <div class="form-group col-md-6 col-12">
                                 <label for="income">Monthly Income ($) <span class="text-danger">*</span></label>
-                                <input type="number" onkeyup="fetchIncome()" class="form-control" id="income" required>
+                                <input type="number" name="income" onkeyup="fetchIncome()" class="form-control" id="income" required>
                                 <small class="text-success" id="incomeDisplay"></small>
                             </div>
                             
                             <div class="form-group col-md-6 col-12">
                                 <label for="expenses">Monthly Expenses ($) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="expenses" required>
+                                <input type="number" name="expenses" class="form-control" id="expenses" required>
                             </div>
 
                         </div>
@@ -781,12 +812,12 @@
                                     $query = mysqli_query($connection, "SELECT * FROM deposit WHERE userId= '$userId' AND status= 'accepted'");
                                     if (mysqli_num_rows($query) > 0) {
                                 ?>
-                                        <input type="number" class="form-control" min="0" id="loanAmount" required>
+                                        <input type="number" class="form-control" min="0" name="loanAmount" id="loanAmount" required>
                                 <?php                                    
                                     }
                                     else {
                                 ?>
-                                        <input type="number" class="form-control" min="0" max="5000" id="loanAmount" required>
+                                        <input type="number" class="form-control" min="0" name="loanAmount" max="5000" id="loanAmount" required>
                                 <?php
                                     }
                                 ?>
@@ -794,8 +825,8 @@
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="loanPurpose">Loan Purpose <span class="text-danger">*</span></label>
-                                <select id="loanPurpose" onchange="showOtherPurpose(this)" class="form-control" required>
-                                    <option value="">Select a purpose</option>
+                                <select id="loanPurpose" name="purpose" onchange="showOtherPurpose(this)" class="form-control" required>
+                                    <option value="" disabled>Select a purpose</option>
                                     <option value="debt-consolidation">Debt consolidation</option>
                                     <option value="home-improvement">Home improvement</option>
                                     <option value="car-purchase">Car purchase</option>
@@ -813,7 +844,7 @@
                             
                             <div class="form-group col-md-6 col-12">
                                 <label for="loanTerm">Repayment method <span class="text-danger">*</span></label>
-                                <select name="" id="repaymentMethod" required>
+                                <select name="repaymentMethod" id="repaymentMethod" required>
                                     <option value="" selected disabled>Select repayment method</option>
                                     <option value="flexible">Flexible Repayment</option>
                                     <option value="bullet">Bullet Repayment</option>
@@ -845,7 +876,7 @@
                                     <span class="required">*</span>
                                 </label>
                                 <div class="file-input-wrapper">
-                                    <input type="file" id="idProof" class="file-input" accept=".pdf,.jpg,.png" required>
+                                    <input type="file" id="idProof" class="file-input" name="GII" accept=".pdf,.jpg,.png" required>
                                     <button type="button" class="browse-btn">
                                         <span class="bi bi-upload"></span>
                                     </button>
@@ -863,7 +894,7 @@
                                     <span class="required">*</span>
                                 </label>
                                 <div class="file-input-wrapper">
-                                    <input type="file" id="addressProof" class="file-input" accept=".pdf,.jpg,.png" required>
+                                    <input type="file" id="addressProof" name="POA" class="file-input" accept=".pdf,.jpg,.png" required>
                                     <button type="button" class="browse-btn">
                                         <span class="bi bi-upload"></span>
                                     </button>
@@ -875,17 +906,17 @@
                             <!-- Proof of Income -->
                             <div class="form-group document-upload-group">
                                 <div class="upload-header">
-                                <label for="incomeProof" class="upload-label">
-                                    <i class="bi bi-graph-up icon"></i>
-                                    Proof of Income
-                                    <span class="required">*</span>
-                                </label>
-                                <div class="file-input-wrapper">
-                                    <input type="file" id="incomeProof" class="file-input" accept=".pdf,.jpg,.png" required>
-                                    <button type="button" class="browse-btn">
-                                        <span class="bi bi-upload"></span>
-                                    </button>
-                                </div>
+                                    <label for="incomeProof" class="upload-label">
+                                        <i class="bi bi-graph-up icon"></i>
+                                        Proof of Income
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="incomeProof" name="incomeProof" class="file-input" accept=".pdf,.jpg,.png" required>
+                                        <button type="button" class="browse-btn">
+                                            <span class="bi bi-upload"></span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="preview-container" id="incomeProof-preview"></div>
                             </div>

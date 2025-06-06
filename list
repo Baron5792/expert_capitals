@@ -9,7 +9,8 @@ register.php
 registerlogic.php
 login.php
 loginlogic.php
-
+submit-loan-application.php
+loan-history.php
 
 
 

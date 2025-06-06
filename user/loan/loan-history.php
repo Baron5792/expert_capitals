@@ -45,16 +45,16 @@
     <!-- display swal alert -->
 <?php
     // Display SweetAlert if error exists
-    if (isset($_SESSION['swal_success'])): 
+    if (isset($_SESSION['success'])): 
 ?>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire(<?= json_encode($_SESSION['swal_success']) ?>);
+                Swal.fire(<?= json_encode($_SESSION['success']) ?>);
             });
         </script>
 <?php
         // Clear the error after displaying
-        unset($_SESSION['swal_success']); 
+        unset($_SESSION['success']); 
     endif;
 ?>
 
@@ -69,11 +69,11 @@
             <th>S/N</th>
             <th></th>
             <th>Amount ($)</th>
-            <th>Bank</th>
-            <th>Account No.</th>
+            <th>Duration</th>
+            <th>Fixed Amount</th>
             <th>Repayment Term</th>
             <th>Repayment Amount ($)</th>
-            <th>Repayment Frequency</th>
+            <th>Loan Term</th>
             <th>Date</th>
             <th>Status</th>
             <th>Action</th>
@@ -86,11 +86,6 @@
                     $id = $row['id'];
                     $uniqId = $row['uniqId'];
                     $amount = $row['amount'];
-                    $bank = $row['bankName'];
-                    $account_no = $row['account_number'];
-                    $term = $row['terms'];
-                    $repaymentAmount = $row['repaymentAmount'];
-                    $repaymentFrequency = $row['repaymentFrequency'];
                     $date = $row['date'];
                     $status = $row['status'];
                     $day = date('j', strtotime($date));
@@ -103,11 +98,6 @@
                         <td><?= $sn++ ?></td>
                         <td><?= $uniqId ?></td>
                         <td><?= $amount ?></td>
-                        <td><?= $bank ?></td>
-                        <td><?= $account_no ?></td>
-                        <td><?= $term ?></td>
-                        <td><?= $repaymentAmount ?></td>
-                        <td><?= $repaymentFrequency ?></td>
                         <td><?= $formattedDate ?></td>
                         <?php if ($status == 'pending'): ?>
                             <td><button type="button" class="btn btn-warning btn-sm button button4 text-sm">Pending</button></td>

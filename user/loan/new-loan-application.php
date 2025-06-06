@@ -411,13 +411,25 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+<?php
+    if (isset($_SESSION['error'])):
+?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire(<?= json_encode($_SESSION['error']) ?>);
+            })
+        </script>
+<?php
+    unset($_SESSION['error']);
+    endif;
+?>
+
 
 <!-- codes here -->
 <div class="container-fluid mt-4">
-
     <!-- loan image -->
     <div class="pc-image mt-4">
-        <img src="../../assets/images/loan/coin in hand.jpeg" alt="" class="w-100">
+        <img src="<?= URL ?>assets/images/loan/EXPERT 1.jpg" alt="" class="w-100">
 
         <div class="image-text">
             <div class="top-text">
@@ -661,20 +673,34 @@
                                 <small class="form-text text-muted">Format: DD/MM/YYYY</small>
                             </div>
 
+
                             <div class="form-group col-md-6 col-12">
-                                <label for="dob">Social Security Number (SSN) <span class="text-danger">*</span></label>
+                                <label for="userSsn">Social Security Number (SSN) <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             <i class="bi bi-card-text"></i>
                                         </span>
                                     </div>
-                                    <input type="password" name="ssn" id="userSsn" class="form-control" required placeholder="Enter SSN">
+                                    <input 
+                                        type="password" 
+                                        name="ssn" 
+                                        id="userSsn" 
+                                        class="form-control" 
+                                        required 
+                                        placeholder="XXX-XX-XXXX"
+                                        pattern="\d{3}-\d{2}-\d{4}" 
+                                        title="Please enter 9 digits in XXX-XX-XXXX format" 
+                                        maxlength="11"
+                                        oninput="formatSsn(this)"
+                                    >
                                     <span class="input-group-text" id="toggleSsnVisibility">
                                         <i class="bi bi-eye" id="eye-icon"></i>
                                     </span>
                                 </div>
                             </div>
+
+
                             
                             <div class="form-group col-md-6 col-12">
                                 <label for="gender">Gender <span class="text-danger">*</span></label>
@@ -818,6 +844,7 @@
                                     else {
                                 ?>
                                         <input type="number" class="form-control" min="0" name="loanAmount" max="5000" id="loanAmount" required>
+                                        <p class="small text-danger mt-0"><i class="bi bi-info-circle-fill me-2"></i> Thank you for your interest! Currently, new customers can borrow up to $5,000. After making a successful transactions with us, you'll qualify for higher amounts. Visit our Help Center to learn more</p>
                                 <?php
                                     }
                                 ?>
@@ -855,7 +882,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="button-group">
                             <button type="button" class="prev-btn">Previous</button>
                             <button type="button" class="next-btn" disabled>Next</button>
@@ -1033,39 +1060,6 @@
 
 
 
-    // maximum loan amount for non-deposited users
-    document.addEventListener('DOMContentLoaded', function() {
-        const loanAmountInput = document.getElementById('loanAmount');
-        const MAX_AMOUNT = 5000;
-
-        loanAmountInput.addEventListener('change', function() {
-            // Get the numeric value (parsed as float)
-            const enteredAmount = parseFloat(this.value);
-            
-            // Check if amount exceeds maximum
-            if (enteredAmount > MAX_AMOUNT) {
-                // Reset to max value
-                this.value = MAX_AMOUNT;
-                
-                // Show alert
-                alert(`The maximum loan amount is $${MAX_AMOUNT.toLocaleString()}. Your entered amount has been adjusted.`);
-                this.focus();
-            }
-        });
-
-        // Optional: Prevent typing values over 5000 in real-time
-        loanAmountInput.addEventListener('input', function() {
-            if (this.value > MAX_AMOUNT) {
-                this.value = MAX_AMOUNT;
-                Swal.fire({
-                    title : 'An error occured',
-                    html : `<p class="small">Thank you for your interest! Currently, new customers can borrow up to $5,000. After making a successful transactions with us, you'll qualify for higher amounts. Visit our Help Center to learn more</p>`,
-                    icon : 'error',
-                    confirmButtonColor : 'red',
-                })
-            }
-        });
-    });
 
 
 

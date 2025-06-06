@@ -15,33 +15,33 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (this.value === 'flexible') {
         container.innerHTML = `
-            <div class="form-group col-md-6 col-12 mt-3">
+            <div class="form-group col-md-12 col-12 mt-3">
                 <label for="duration">Choose your duration <span class="text-danger">*</span></label>
-                <select class="form-control" id="duration" required>
+                <select class="form-control" name="duration" id="duration" required>
                     <option value="" selected disabled>Select duration</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
                 </select>
             </div>
-            <div class="form-group col-md-6 col-12 mt-3">
+            <div class="form-group col-md-12 col-12 mt-3">
                 <label for="fixedAmount">Fixed amount per payment <span class="text-danger">*</span></label>
                 <div class="input-group">
                     <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" id="fixedAmount" min="1" required>
+                    <input type="number" name="fixedAmount" class="form-control" id="fixedAmount" min="1" required>
                 </div>
             </div>
-            <div class="form-group col-md-6 col-12 mt-3">
+            <div class="form-group col-md-12 col-12 mt-3">
                 <label for="flexibleTerm">Loan term (in months) <span class="text-danger">*</span></label>
-                <input type="number" class="form-control" id="flexibleTerm" min="1" required>
+                <input type="number" class="form-control" name="flexibleTerm" id="flexibleTerm" min="1" required>
             </div>
         `;
     } 
     else if (this.value === 'bullet') {
         container.innerHTML = `
-            <div class="form-group col-md-6 col-12 mt-3">
+            <div class="form-group col-md-12 col-12 mt-3">
                 <label for="bulletTerm">Loan term (in months) <span class="text-danger">*</span></label>
-                <input type="number" class="form-control" id="bulletTerm" min="1" required>
+                <input type="number" class="form-control" name="bulletTerm" id="bulletTerm" min="1" required>
             </div>
         `;
     }

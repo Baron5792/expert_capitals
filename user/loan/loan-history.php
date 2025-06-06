@@ -86,6 +86,11 @@
                     $id = $row['id'];
                     $uniqId = $row['uniqId'];
                     $amount = $row['amount'];
+                    $duration = $row['duration'];
+                    $fixed_amount = $row['fixed_amount'];
+                    $repaymentTerm = $row['repaymentTerm'];
+                    $displayTotalRepayment = $row['displayTotalRepayment'];
+                    $loan_term = $row['loan_term'];
                     $date = $row['date'];
                     $status = $row['status'];
                     $day = date('j', strtotime($date));
@@ -93,11 +98,18 @@
                     $year = date('Y', strtotime($date));
                     $time = date('h:i A', strtotime($date));
                     $formattedDate = "$day $month $year";
+
+                
         ?>
                     <tr>
                         <td><?= $sn++ ?></td>
                         <td><?= $uniqId ?></td>
-                        <td><?= $amount ?></td>
+                        <td><?= number_format($amount) ?></td>
+                        <td><?= $duration ?></td>
+                        <td><?= $fixed_amount ?></td>
+                        <td style="text-transform: capitalize;"><?= $repaymentTerm ?> Method</td>
+                        <td><?= $displayTotalRepayment ?></td>
+                        <td><?= $loan_term ?> Months</td>
                         <td><?= $formattedDate ?></td>
                         <?php if ($status == 'pending'): ?>
                             <td><button type="button" class="btn btn-warning btn-sm button button4 text-sm">Pending</button></td>

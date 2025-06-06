@@ -403,6 +403,41 @@
 
     
     }
+
+
+    /* for loan calculator */
+    /* Gradient background for header */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%) !important;
+    }
+
+    /* Success highlight background */
+    .bg-success-light {
+        background-color: rgba(40, 167, 69, 0.08) !important;
+    }
+
+    /* Smooth animations */
+    .card {
+        transition: all 0.3s ease;
+        transform: translateY(0);
+    }
+
+    .card:hover {
+        box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Badge styling */
+    .badge {
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+    }
+
+    /* Font weights */
+    .font-weight-semibold {
+        font-weight: 600;
+    }
 </style>
 
 <script>
@@ -615,6 +650,7 @@
 
                 <form action="<?= URL ?>user/loan/submit-loan-application.php" method="POST" enctype="multipart/form-data" id="multiStepForm">
                     <input type="hidden" name="userId" value="<?= $userId ?>">
+                    <input type="hidden" name="displayTotalRepayment" id="displayLogicTrack" readonly>
                     <!-- Step 1: Personal Information -->
                     <div class="form-step active" id="step1">
                         <p class="title">Personal Information</p>
@@ -800,12 +836,12 @@
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="Employer Name">Employer Name <span class="text-danger">*</span></label>
-                                <input type="text" name="employers-name" class="form-control" id="expenses" required>
+                                <input type="text" name="employers-name" class="form-control" id="" required>
                             </div>
 
                             <div class="form-group col-md-6 col-12">
                                 <label for="expenses">Job Title <span class="text-danger">*</span></label>
-                                <input type="text" name="jobTitle" class="form-control" id="expenses" required>
+                                <input type="text" name="jobTitle" class="form-control" id="" required>
                             </div>
                             
                             <div class="form-group col-md-6 col-12">
@@ -816,7 +852,7 @@
                             
                             <div class="form-group col-md-6 col-12">
                                 <label for="expenses">Monthly Expenses ($) <span class="text-danger">*</span></label>
-                                <input type="number" name="expenses" class="form-control" id="expenses" required>
+                                <input type="number" name="expenses" class="form-control" id="" required>
                             </div>
 
                         </div>
@@ -844,7 +880,7 @@
                                     else {
                                 ?>
                                         <input type="number" class="form-control" min="0" name="loanAmount" max="5000" id="loanAmount" required>
-                                        <p class="small text-danger mt-0"><i class="bi bi-info-circle-fill me-2"></i> Thank you for your interest! Currently, new customers can borrow up to $5,000. After making a successful transactions with us, you'll qualify for higher amounts. Visit our Help Center to learn more</p>
+                                        <p class="small text-secondary mt-0"><i class="bi bi-info-circle-fill text-danger me-2"></i>Thank you for your interest! Currently, new customers can borrow up to $5,000. After making a successful transactions with us, you'll qualify for higher amounts. Visit our Help Center to learn more.</p>
                                 <?php
                                     }
                                 ?>
@@ -951,7 +987,7 @@
 
 
                         <!-- calculate loan rate reasults -->
-                        <div class="row mt-4" id="calculationResults" style="display: none;">
+                        <!-- <div class="row mt-4" id="calculationResults" style="display: none;">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header bg-primary text-white">
@@ -987,8 +1023,75 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         
+
+
+                        <!-- loan calculations -->
+                        <div class="row mt-4" id="calculationResults" style="display: none;">
+                            <div class="col-12">
+                                <div class="card border-0 shadow-sm overflow-hidden">
+                                    <div class="card-header bg-gradient-primary text-white py-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="mb-0 font-weight-semibold">
+                                                <i class="fas fa-calculator mr-2"></i> Loan Calculation Summary
+                                            </h5>
+                                            <span class="badge bg-white text-primary py-2 px-3" id="displayMethod">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="list-group list-group-flush">
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                                <div>
+                                                    <h6 class="mb-1 text-muted">Principal Amount</h6>
+                                                    <small class="text-muted">Original loan value</small>
+                                                </div>
+                                                <span class="h5 mb-0 font-weight-bold" id="displayPrincipal">$0.00</span>
+                                            </div>
+                                            
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                                <div>
+                                                    <h6 class="mb-1 text-muted">Interest Rate</h6>
+                                                    <small class="text-muted">Annual percentage rate</small>
+                                                </div>
+                                                <span class="h5 mb-0">0.7%</span>
+                                            </div>
+                                            
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                                <div>
+                                                    <h6 class="mb-1 text-muted">Loan Term</h6>
+                                                    <small class="text-muted">Repayment duration</small>
+                                                </div>
+                                                <span class="h5 mb-0" id="displayTerm">-</span>
+                                            </div>
+                                            
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-light">
+                                                <div>
+                                                    <h6 class="mb-1 text-primary">Total Interest</h6>
+                                                    <small class="text-muted">Accrued interest</small>
+                                                </div>
+                                                <span class="h5 mb-0 text-primary font-weight-bold" id="displayTotalInterest">$0.00</span>
+                                            </div>
+                                            
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-3 bg-success-light">
+                                                <div>
+                                                    <h6 class="mb-1 text-success">Total Repayment</h6>
+                                                    <small class="text-success">Principal + Interest</small>
+                                                </div>
+                                                <span class="h5 mb-0 text-success font-weight-bold" id="displayTotalRepayment">$0.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-white border-top text-center py-3">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle mr-1"></i> 
+                                            Calculations are estimates only. Final amounts may vary.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="button-group">
                             <button type="button" class="prev-btn">Previous</button>
                             <button type="submit" class="submit-btn">Submit Application</button>

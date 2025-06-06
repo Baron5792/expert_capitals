@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function calculateLoan() {
     const principal = parseFloat(document.getElementById('loanAmount').value) || 0;
-    const interestRate = 0.1 / 100; // 0.1%
+    const interestRate = 0.7 / 100; // 0.7%
     const method = document.getElementById('repaymentMethod').value;
     
     if (!principal || !method) return;
@@ -48,6 +48,7 @@ function calculateLoan() {
     document.getElementById('displayTerm').textContent = `${termMonths} months`;
     document.getElementById('displayTotalInterest').textContent = `$${totalInterest.toFixed(2)}`;
     document.getElementById('displayTotalRepayment').textContent = `$${totalRepayment.toFixed(2)}`;
+    document.getElementById('displayLogicTrack').value = totalRepayment.toFixed(2);
     
     // Show results
     document.getElementById('calculationResults').style.display = 'block';

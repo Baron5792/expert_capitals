@@ -1,5 +1,5 @@
 <?php
-    include "../../database.php";
+    include __DIR__ . "/../../database.php";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors = [];
@@ -12,6 +12,7 @@
         $ssn = $_POST['ssn'];
         $gender = $_POST['gender'];
         $uniqId = uniqid(100, true);
+        $displayTotalRepayment = htmlspecialchars($_POST['displayTotalRepayment']);
 
         // for contact info
         $address = htmlspecialchars($_POST['address']);
@@ -113,7 +114,7 @@
                         }
 
                         // insert the data into the database
-                        $insert = mysqli_query($connection, "INSERT INTO loan (userId, middleName, mothersMaidenName, mothersFullName, fathersFullName, uniqId, date_of_birth, ssn, address, city, zipcode, income, employment_status, amount, purpose, GII, POA, incomeProof, repaymentTerm, duration, fixed_amount, loan_term, status) VALUES ('$userId', '$middleName', '$mothersMaidenName', '$mothersFullName', '$fathersFullName', '$uniqId', '$DOB', '$ssn', '$address', '$city', '$zipcode', '$income', '$employmentStatus', '$loanAmount', '$purpose', '$GIIName', '$POAName', '$incomeProofName', '$repaymentMethod', '$duration', '$fixed_amount', '$loan_term', 'pending')");
+                        $insert = mysqli_query($connection, "INSERT INTO loan (userId, middleName, mothersMaidenName, mothersFullName, fathersFullName, uniqId, date_of_birth, ssn, address, city, zipcode, income, employment_status, amount, purpose, GII, POA, incomeProof, repaymentTerm, duration, fixed_amount, loan_term, status, displayTotalRepayment) VALUES ('$userId', '$middleName', '$mothersMaidenName', '$mothersFullName', '$fathersFullName', '$uniqId', '$DOB', '$ssn', '$address', '$city', '$zipcode', '$income', '$employmentStatus', '$loanAmount', '$purpose', '$GIIName', '$POAName', '$incomeProofName', '$repaymentMethod', '$duration', '$fixed_amount', '$loan_term', 'pending', '$displayTotalRepayment')");
                         if ($insert) {
                             // Email code here for a successful loan submission
                             $_SESSION['success'] = [

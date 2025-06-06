@@ -570,16 +570,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const sectionContent = document.querySelector('.section-40-content');
-            const preloader = document.createElement('div');
-            preloader.className = 'preloader';
-            preloader.innerHTML = '<i class="fas fa-sync-alt preloader-icon"></i>';
             sectionContent.style.position = 'relative';
-            sectionContent.appendChild(preloader);
-
-            setTimeout(() => {
-                preloader.style.display = 'none';
-                sectionContent.style.overflow = 'auto';
-            }, 1000);
         });
 
         $(document).ready(function() {
